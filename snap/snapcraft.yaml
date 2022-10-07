@@ -1,0 +1,52 @@
+name: superslicer
+adopt-info: superslicer
+summary: A PrusaSlicer fork
+description: |
+  A PrusaSlicer fork (which is a slic3r fork) (previously Slic3r++)
+license: AGPL-3.0
+
+base: core20
+grade: stable
+confinement: strict
+compression: lzo
+
+apps:
+  superslicer:
+    command: usr/local/bin/superslicer
+    extensions:
+      - gnome-3-38     
+    environment:
+      LC_ALL: C.UTF-8
+      LANG: C.UTF-8
+    plugs:
+      - mount-observe
+      - process-control
+      - system-observe
+      - hardware-observe
+      - network
+      - network-observe
+      - home
+      - removable-media
+
+parts:
+  superslicer:
+    source: https://github.com/supermerill/SuperSlicer
+    source-type: git
+    plugin: cmake
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr/local
+      - -DDEP_WX_GTK3=ON
+      
+    build-packages:
+      - libglu1-mesa-dev
+      - libgtk-3-dev
+      - libdbus-1-dev
+      
+    stage-packages:
+      - libglu1-mesa-dev
+      - libgtk-3-dev
+      - libdbus-1-dev
+      
+    override-pull: |
+      snapcraftctl pull
+      snapcraftctl set-version "$(git describe --tags | sed 's/^v//' | cut -d "-" -f1)"
