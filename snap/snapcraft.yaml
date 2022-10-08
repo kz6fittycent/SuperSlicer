@@ -37,8 +37,8 @@ parts:
     override-build: | 
       
       # Build deps
-      git clone https://www.github.com/REPO_NAME/SLIC3R_NAME
-      cd SLIC3R_NAME
+      git clone https://github.com/supermerill/SuperSlicer
+      cd SuperSlicer
       cd deps
       mkdir build
       cd build
@@ -47,14 +47,12 @@ parts:
       cd ../..
       
       # Now build superslicer
-      mkdir build
-      cd build
       cmake .. -DSLIC3R_STATIC=1 -DSLIC3R_GTK=3 -DSLIC3R_PCH=OFF -DCMAKE_PREFIX_PATH=$(pwd)/../deps/build/destdir/usr/local
-      make -j4
+      make -j16
       
       # Now move all the things into the snap
-      mkdir -p $SNAPCRAFT_PART_INSTALL/bin/
-      cp -r * $SNAPCRAFT_PART_INSTALL/bin/
+      mkdir -p $SNAPCRAFT_PART_INSTALL/usr/local/bin/
+      cp -r * $SNAPCRAFT_PART_INSTALL/usr/local/bin/
       
     build-packages:
       - libglu1-mesa-dev
